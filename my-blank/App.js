@@ -1,12 +1,14 @@
 //Zona 1, donde van todas las imopportaciones
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
+import React, {useState} from 'react';
 
 
-const Texto=(props)=>{
-  const {chilldren}=props
+const Texto=()=>{
+  const [contenido, setContenido]=useState('hola munndo React')
+  const actualizarTexto=()=>{setContenido('Estado Actualizado')}
   return(
-    <Text>{chilldren}</Text>
+      <Text onPress={actualizarTexto}> {contenido} </Text>
   )
 }
 
@@ -14,9 +16,9 @@ const Texto=(props)=>{
 export default function App() {
   return (
     <View style={styles.container}>
-      <Texto> "Hola" </Texto>
-      <Texto> "Mundo" </Texto>
-      <Texto> "React Native" </Texto>
+      <Texto></Texto>
+      <Texto></Texto>
+      <Texto></Texto>
 
       <Button title="Presioname"> </Button>
       <StatusBar style="auto" />
