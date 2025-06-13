@@ -1,37 +1,44 @@
-//Zona 1, donde van todas las imopportaciones
+/* Zona 1 importaciones */
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import React, {useState} from 'react';
+import { StyleSheet, Text, View,Button } from 'react-native';
+import React,{useState} from 'react';
 
+const Texto=({style})=>{
 
-const Texto=()=>{
-  const [contenido, setContenido]=useState('hola munndo React')
-  const actualizarTexto=()=>{setContenido('Estado Actualizado')}
-  return(
-      <Text onPress={actualizarTexto}> {contenido} </Text>
-  )
+  const[contenido,setContenido]=useState('Hola Kevin React')
+  const actualizarTexto=()=>{setContenido('Estado Actualizado')
+  }
+  return(<Text style={[styles.Text,style]} onPress={actualizarTexto}>{contenido}</Text>)
 }
 
-//Zona2, Main
+/* Zona 2 Main */
 export default function App() {
   return (
     <View style={styles.container}>
-      <Texto></Texto>
-      <Texto></Texto>
-      <Texto></Texto>
-
-      <Button title="Presioname"> </Button>
+      <Texto  style={styles.red}> </Texto>
+      <Texto  style={styles.blue} ></Texto>
+      <Texto  style={styles.green}></Texto>
       <StatusBar style="auto" />
     </View>
   );
 }
-
-//Zona 3, Estilos 
+/*  zona 3 estilos */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
+    alignItems: 'base-line',
     justifyContent: 'center',
+    flexDirection:"column",
   },
+  Text:{
+    color:'purple',
+    fontSize:25,
+   
+    
+  },
+  red: {  backgroundColor: 'red'},
+  green: { backgroundColor: 'green'},
+  blue: { backgroundColor: 'blue'},
+
 });
