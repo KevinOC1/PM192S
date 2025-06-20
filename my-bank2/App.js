@@ -1,126 +1,58 @@
+/* Zona 1: Importaciones */
 import React, { useState } from 'react';
-import {
-  Alert,
-  SafeAreaView,
-  StyleSheet,
-  Switch,
-  Text,
-  TouchableOpacity,
-  View,
-  Image
-} from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 
+
+/* Zona 2: Main(ejecutacion) */
 export default function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isSwitchBlocked, setIsSwitchBlocked] = useState(true);
-  const [disabledButton, setDisabledButton] = useState(false);
-  const [count, setCount] = useState(0);
+  const [nombre, setNombre] = useState('');
 
-  const toggleDarkMode = () => setIsDarkMode(previous => !previous);
+  const mostrarAlerta = () => {
+    if (nombre.trim() === '') {
+      Alert.alert('Error', 'Por favor escribe algo');
+      alert('Escribe algo jilipollas');
+    } else {
+      Alert.alert('Bienvenida', `Hola ${nombre}, bienvenido a nuestra app :D`);
+      alert('Hola ' + nombre + ' bienvenid@ a nuestra app :D');
 
-  const handleFirstButton = () => Alert.alert('Me presionaste');
-  const handleDisableButton = () => setDisabledButton(true);
-  const handleCounter = () => setCount(count + 1);
-  const handlePokeball = () => Alert.alert('¡La pokebola ha sido presionada!');
+    }
+  };
 
   return (
-    <SafeAreaView style={[styles.container, isDarkMode && styles.darkBackground]}>
-      <Text style={[styles.title, isDarkMode && styles.darkText]}>Práctica Switch</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>Ingresa tu nombre:</Text>
 
-      {/* Switch principal para modo oscuro */}
-      <View style={styles.switchContainer}>
-        <Text style={isDarkMode ? styles.darkText : styles.lightText}>Modo Oscuro</Text>
-        <Switch
-          value={isDarkMode}
-          onValueChange={isSwitchBlocked ? null : toggleDarkMode}
-        />
-      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Escribe tu nombre :"
+        onChangeText={setNombre}
+        value={nombre}
+      />
 
-      {/* Switch que bloquea el cambio */}
-      <View style={styles.switchContainer}>
-        <Text style={isDarkMode ? styles.darkText : styles.lightText}>Bloquear Switch</Text>
-        <Switch
-          value={isSwitchBlocked}
-          onValueChange={() => setIsSwitchBlocked(!isSwitchBlocked)}
-        />
-      </View>
-
-      {/* Botón 1 - alerta */}
-      <TouchableOpacity style={styles.button} onPress={handleFirstButton}>
-        <Text style={styles.buttonText}>Primer Botón</Text>
-      </TouchableOpacity>
-
-      {/* Botón 2 - desactiva después de presionar */}
-      <TouchableOpacity
-        style={[styles.button, disabledButton && styles.buttonDisabled]}
-        onPress={handleDisableButton}
-        disabled={disabledButton}
-      >
-        <Text style={styles.buttonText}>
-          {disabledButton ? 'Desactivado' : 'Segundo Botón'}
-        </Text>
-      </TouchableOpacity>
-
-      {/* Botón 3 - contador */}
-      <TouchableOpacity style={styles.button} onPress={handleCounter}>
-        <Text style={styles.buttonText}>Tercer Botón (Contador: {count})</Text>
-      </TouchableOpacity>
-
-      {/* Botón 4 - pokebola */}
-      <TouchableOpacity onPress={handlePokeball}>
-        <Image
-          source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Poké_Ball_icon.svg' }}
-          style={styles.pokeball}
-        />
-      </TouchableOpacity>
-    </SafeAreaView>
+      <Button title="Enviar" onPress={mostrarAlerta} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: 'white', 
   },
-  darkBackground: {
-    backgroundColor: '#222',
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  lightText: {
-    color: '#000',
-  },
-  darkText: {
-    color: '#fff',
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  text: {
+    fontSize: 18,
     marginBottom: 10,
-    gap: 10,
+    color: '#000', 
   },
-  button: {
-    backgroundColor: '#3498db',
-    padding: 12,
-    marginTop: 10,
-    borderRadius: 8,
-    width: '80%',
-    alignItems: 'center',
-  },
-  buttonDisabled: {
-    backgroundColor: '#95a5a6',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  pokeball: {
-    width: 60,
-    height: 60,
-    marginTop: 20,
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc', 
+    padding: 10,
+    marginBottom: 20,
+    borderRadius: 5,
+    backgroundColor: '#f9f9f9', // Color de fondo del input
+    color: '#000', // Texto del input en negro
   },
 });
