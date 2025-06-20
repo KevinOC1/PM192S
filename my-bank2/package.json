@@ -1,5 +1,5 @@
 {
-  "name": "my-blank",
+  "name": "my-bank2",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -9,17 +9,13 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@expo/metro-runtime": "~5.0.4",
-    "area": "^0.0.2",
-    "context": "^3.0.33",
-    "expo": "~53.0.9",
+    "expo": "~53.0.12",
     "expo-status-bar": "~2.2.3",
-    "native": "^0.3.3",
-    "react": "^18.2.0",
-    "react-native": "^0.73.4",
-    "react-native-safe-area-context": "^5.4.1",
+    "react": "19.0.0",
+    "react-native": "0.79.4",
+    "react-dom": "19.0.0",
     "react-native-web": "^0.20.0",
-    "safe": "^0.4.8"
+    "@expo/metro-runtime": "~5.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
