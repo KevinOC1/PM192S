@@ -1,58 +1,96 @@
-/* Zona 1: Importaciones */
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+// Zona 1: Importaciones
+import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
+import { StyleSheet, Text, View, Switch, ImageBackground } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
-
-/* Zona 2: Main(ejecutacion) */
+// Zona 2: Componente Principal
 export default function App() {
-  const [nombre, setNombre] = useState('');
-
-  const mostrarAlerta = () => {
-    if (nombre.trim() === '') {
-      Alert.alert('Error', 'Por favor escribe algo');
-      alert('Escribe algo jilipollas');
-    } else {
-      Alert.alert('Bienvenida', `Hola ${nombre}, bienvenido a nuestra app :D`);
-      alert('Hola ' + nombre + ' bienvenid@ a nuestra app :D');
-
-    }
-  };
+  const [activarSwitch, setActivarSwitch] = useState(false);
+  const [modoOscuro, setModoOscuro] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Ingresa tu nombre:</Text>
+    <SafeAreaProvider>
+      <ImageBackground
+        source={require('./assets/fondo.jpg')} // 🔁 Cambia esto si tu imagen está en otro lugar
+        style={styles.fondoImagen}
+        resizeMode="cover"
+      >
+        <View style={[styles.contenedor, modoOscuro && styles.fondoOscuro]}>
+          <SafeAreaView style={{ flex: 1 }}>
+            <Text style={[styles.titulo, modoOscuro && styles.textoClaro]}>
+              Práctica con Switch
+            </Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Escribe tu nombre :"
-        onChangeText={setNombre}
-        value={nombre}
-      />
+            <View style={styles.opcion}>
+              <Text style={[styles.etiqueta, modoOscuro && styles.textoClaro]}>
+                Activar Switch 2
+              </Text>
+              <Switch
+                value={activarSwitch}
+                onValueChange={setActivarSwitch}
+                trackColor={{ false: '#ccc', true: '#4caf50' }}
+                thumbColor={activarSwitch ? '#ffffff' : '#999999'}
+              />
+            </View>
 
-      <Button title="Enviar" onPress={mostrarAlerta} />
-    </View>
+            <View style={styles.opcion}>
+              <Text style={[styles.etiqueta, modoOscuro && styles.textoClaro]}>
+                Modo Oscuro
+              </Text>
+              <Switch
+                value={modoOscuro}
+                onValueChange={setModoOscuro}
+                disabled={activarSwitch}
+                trackColor={
+                  activarSwitch
+                    ? { false: '#ffbbbb', true: '#ff3b30' }
+                    : { false: '#ccc', true: '#4caf50' }
+                }
+                thumbColor={modoOscuro ? '#ffffff' : '#999999'}
+              />
+            </View>
+
+            <StatusBar style={modoOscuro ? 'light' : 'dark'} />
+          </SafeAreaView>
+        </View>
+      </ImageBackground>
+    </SafeAreaProvider>
   );
 }
 
+// Zona 3: Estilos
 const styles = StyleSheet.create({
-  container: {
+  fondoImagen: {
     flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  contenedor: {
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.8)', // ✅ Fondo semitransparente por encima de la imagen
+    paddingHorizontal: 10,
     justifyContent: 'center',
-    padding: 20,
-    backgroundColor: 'white', 
   },
-  text: {
+  fondoOscuro: {
+    backgroundColor: 'rgba(0,0,0,0.6)', // Fondo semitransparente en modo oscuro
+  },
+  titulo: {
+    fontSize: 24,
+    marginBottom: 40,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  textoClaro: {
+    color: '#ffffff',
+  },
+  opcion: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 30,
+    alignItems: 'center',
+  },
+  etiqueta: {
     fontSize: 18,
-    marginBottom: 10,
-    color: '#000', 
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc', 
-    padding: 10,
-    marginBottom: 20,
-    borderRadius: 5,
-    backgroundColor: '#f9f9f9', // Color de fondo del input
-    color: '#000', // Texto del input en negro
   },
 });
