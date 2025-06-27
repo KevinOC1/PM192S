@@ -1,96 +1,143 @@
-// Zona 1: Importaciones
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { StyleSheet, Text, View, Switch, ImageBackground } from 'react-native';
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 
-// Zona 2: Componente Principal
 export default function App() {
-  const [activarSwitch, setActivarSwitch] = useState(false);
-  const [modoOscuro, setModoOscuro] = useState(false);
+  const [nombres, setNombres] = useState([
+    'Kevin', 'Mariano', 'Ponchito', 'Mario', 'Polo', 'Juan',
+    'Alexis', 'Marian', 'Gael',
+  ]);
+
+  const [nuevoNombre, setNuevoNombre] = useState('');
+
+  const [scrollHeight, setScrollHeight] = useState(0);
+  const [contentHeight, setContentHeight] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
+
+  const handleScroll = (event) => {
+    setScrollY(event.nativeEvent.contentOffset.y);
+  };
+
+  const scrollbarHeight = scrollHeight * (scrollHeight / contentHeight);
+  const scrollbarPosition = scrollY * (scrollHeight / contentHeight);
+
+  const agregarNombre = () => {
+    const nombreTrim = nuevoNombre.trim();
+    if (nombreTrim.length > 0) {
+      setNombres([...nombres, nombreTrim]);
+      setNuevoNombre('');
+    }
+  };
 
   return (
-    <SafeAreaProvider>
-      <ImageBackground
-        source={require('./assets/fondo.jpg')} // 🔁 Cambia esto si tu imagen está en otro lugar
-        style={styles.fondoImagen}
-        resizeMode="cover"
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Pase de Lista</Text>
+
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.input}
+          placeholder="Agréguese a la lista"
+          placeholderTextColor="#888"
+          value={nuevoNombre}
+          onChangeText={setNuevoNombre}
+          onSubmitEditing={agregarNombre}
+          returnKeyType="done"
+        />
+        <TouchableOpacity style={styles.btnAgregar} onPress={agregarNombre}>
+          <Text style={styles.btnText}>Agregar</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.scrollWrapper}
+        onLayout={(event) => setScrollHeight(event.nativeEvent.layout.height)}
       >
-        <View style={[styles.contenedor, modoOscuro && styles.fondoOscuro]}>
-          <SafeAreaView style={{ flex: 1 }}>
-            <Text style={[styles.titulo, modoOscuro && styles.textoClaro]}>
-              Práctica con Switch
-            </Text>
-
-            <View style={styles.opcion}>
-              <Text style={[styles.etiqueta, modoOscuro && styles.textoClaro]}>
-                Activar Switch 2
-              </Text>
-              <Switch
-                value={activarSwitch}
-                onValueChange={setActivarSwitch}
-                trackColor={{ false: '#ccc', true: '#4caf50' }}
-                thumbColor={activarSwitch ? '#ffffff' : '#999999'}
-              />
+        <ScrollView style={styles.scrollArea}
+          onContentSizeChange={(w, h) => setContentHeight(h)}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+        >
+          {nombres.map((nombre, index) => (
+            <View key={index} style={styles.item}>
+              <Text style={styles.texto}>{nombre}</Text>
             </View>
+          ))}
+        </ScrollView>
 
-            <View style={styles.opcion}>
-              <Text style={[styles.etiqueta, modoOscuro && styles.textoClaro]}>
-                Modo Oscuro
-              </Text>
-              <Switch
-                value={modoOscuro}
-                onValueChange={setModoOscuro}
-                disabled={activarSwitch}
-                trackColor={
-                  activarSwitch
-                    ? { false: '#ffbbbb', true: '#ff3b30' }
-                    : { false: '#ccc', true: '#4caf50' }
-                }
-                thumbColor={modoOscuro ? '#ffffff' : '#999999'}
-              />
-            </View>
+        {contentHeight > scrollHeight && (
+          <View style={[styles.scrollBar, { height: scrollbarHeight, top: scrollbarPosition }]} />
+        )}
+      </View>
 
-            <StatusBar style={modoOscuro ? 'light' : 'dark'} />
-          </SafeAreaView>
-        </View>
-      </ImageBackground>
-    </SafeAreaProvider>
+      <StatusBar style="light" />
+    </View>
   );
 }
 
-// Zona 3: Estilos
 const styles = StyleSheet.create({
-  fondoImagen: {
+  container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-  contenedor: {
-    flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.8)', // ✅ Fondo semitransparente por encima de la imagen
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  fondoOscuro: {
-    backgroundColor: 'rgba(0,0,0,0.6)', // Fondo semitransparente en modo oscuro
+    backgroundColor: '#e0eff1',
+    paddingTop: 50,
+    paddingHorizontal: 20,
   },
   titulo: {
     fontSize: 24,
-    marginBottom: 40,
+    fontWeight: 'bold',
+    color: '#012677',
+    marginBottom: 15,
     textAlign: 'center',
+  },
+  inputRow: {
+    flexDirection: 'row',
+    marginBottom: 15,
+  },
+  input: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    color: '#000000',
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    height: 45,
+    marginRight: 10,
+  },
+  btnAgregar: {
+    backgroundColor: '#012677',
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    justifyContent: 'center',
+  },
+  btnText: {
+    color: '#fff',
     fontWeight: 'bold',
   },
-  textoClaro: {
-    color: '#ffffff',
+  scrollWrapper: {
+    position: 'relative',
+    height: 500,
   },
-  opcion: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 30,
-    alignItems: 'center',
+  scrollArea: {
+    backgroundColor: '#7db4b5',
+    borderRadius: 12,
+    padding: 10,
+    height: 500,
+    borderWidth: 1,
   },
-  etiqueta: {
+  item: {
+    marginBottom: 10,
+    padding: 15,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+  },
+  texto: {
     fontSize: 18,
+    color: '#000000',
+  },
+  scrollBar: {
+    position: 'absolute',
+    width: 8,
+    right: 2,
+    backgroundColor: '#000000',
+    borderRadius: 3,
   },
 });
